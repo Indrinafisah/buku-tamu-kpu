@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Buku Tamu KPU</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: auto; padding: 20px; }
+        h1 { text-align: center; }
+        input, button { padding: 10px; margin: 5px 0; width: 100%; box-sizing: border-box; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .btn-export { margin-top: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        .btn-export:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+    <h1>Buku Tamu KPU</h1>
+    <form id="formTamu">
+        <input type="text" id="nama" placeholder="Nama Lengkap" required>
+        <input type="text" id="instansi" placeholder="Instansi / Asal" required>
+        <input type="text" id="keperluan" placeholder="Keperluan" required>
+        <button type="submit">Catat Tamu</button>
+    </form>
+
+    <button class="btn-export" onclick="exportToExcel()">Export ke Excel</button>
+
+    <table id="tabelTamu">
+        <thead>
+            <tr><th>No</th><th>Nama</th><th>Instansi</th><th>Keperluan</th></tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        let dataTamu = [];
+
+        document.getElementById("formTamu").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const nama = document.getElementById("nama").value.trim();
+            const instansi = document.getElementById("instansi").value.trim();
+            const keperluan = document.getElementById("keperluan").value.trim();
+
+            if (nama && instansi && keperluan) {
+                dataTamu.push({ nama, instansi, keperluan });
+                tampilkanData();
+                this.reset();
+            }
+        });
+
+        function tampilkanData() {
+            const tbody = document.querySelector("#tabelTamu tbody");
+            tbody.innerHTML = "";
+            dataTamu.forEach((item, index) => {
+                const row = `<tr>
+                    <td>${index + 1}</td>
+                    <td>${item.nama}</td>
+                    <td>${item.instansi}</td>
+                    <td>${item.keperluan}</td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function exportToExcel() {
+            let csv = "No,Nama,Instansi,Keperluan\n";
+            dataTamu.forEach((item, index) => {
+                csv += `${index + 1},"${item.nama}","${item.instansi}","${item.keperluan}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+            const link = document.createElement("a");
+            link.setAttribute("href", URL.createObjectURL(blob));
+            link.setAttribute("download", "buku_tamu_kpu.csv");
+            link.style.display = "none";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
