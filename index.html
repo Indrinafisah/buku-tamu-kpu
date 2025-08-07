@@ -6,7 +6,7 @@
     <style>
         body { font-family: Arial, sans-serif; max-width: 800px; margin: auto; padding: 20px; }
         h1 { text-align: center; }
-        input, button { padding: 10px; margin: 5px 0; width: 100%; box-sizing: border-box; }
+        input, select, button { padding: 10px; margin: 5px 0; width: 100%; box-sizing: border-box; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
         th { background-color: #f2f2f2; }
@@ -20,7 +20,27 @@
         <input type="text" id="nama" placeholder="Nama Lengkap" required>
         <input type="text" id="instansi" placeholder="Instansi / Asal" required>
         <input type="text" id="keperluan" placeholder="Keperluan" required>
-        <input type="text" id="tujuan" placeholder="Mau ketemu siapa" required>
+        
+        <select id="bagian" required>
+            <option value="">-- Pilih Tujuan Bagian --</option>
+            <option value="Bagian Umum">Bagian Umum</option>
+            <option value="Divisi Teknis">Divisi Teknis</option>
+            <option value="Divisi Hukum">Divisi Hukum</option>
+            <option value="Divisi Data & Informasi">Divisi Data & Informasi</option>
+            <option value="Divisi Sosialisasi & Parmas">Divisi Sosialisasi & Parmas</option>
+            <option value="Ketua KPU">Ketua KPU</option>
+        </select>
+
+        <select id="tujuan" required>
+            <option value="">-- Pilih Nama Pegawai --</option>
+            <option value="Ibu Ratna">Ibu Ratna</option>
+            <option value="Bapak Rudi">Bapak Rudi</option>
+            <option value="Ibu Sari">Ibu Sari</option>
+            <option value="Pak Dwi">Pak Dwi</option>
+            <option value="Pak Hendra">Pak Hendra</option>
+            <option value="Lainnya">Lainnya</option>
+        </select>
+
         <button type="submit">Catat Tamu</button>
     </form>
 
@@ -33,7 +53,8 @@
                 <th>Nama</th>
                 <th>Instansi</th>
                 <th>Keperluan</th>
-                <th>Mau Ketemu</th>
+                <th>Tujuan Bagian</th>
+                <th>Nama Pegawai</th>
                 <th>Tanggal</th>
             </tr>
         </thead>
@@ -56,11 +77,12 @@
             const nama = document.getElementById("nama").value.trim();
             const instansi = document.getElementById("instansi").value.trim();
             const keperluan = document.getElementById("keperluan").value.trim();
-            const tujuan = document.getElementById("tujuan").value.trim();
+            const bagian = document.getElementById("bagian").value;
+            const tujuan = document.getElementById("tujuan").value;
             const tanggal = getTanggalHariIni();
 
-            if (nama && instansi && keperluan && tujuan) {
-                dataTamu.push({ nama, instansi, keperluan, tujuan, tanggal });
+            if (nama && instansi && keperluan && bagian && tujuan) {
+                dataTamu.push({ nama, instansi, keperluan, bagian, tujuan, tanggal });
                 tampilkanData();
                 this.reset();
             }
@@ -75,6 +97,7 @@
                     <td>${item.nama}</td>
                     <td>${item.instansi}</td>
                     <td>${item.keperluan}</td>
+                    <td>${item.bagian}</td>
                     <td>${item.tujuan}</td>
                     <td>${item.tanggal}</td>
                 </tr>`;
@@ -83,9 +106,9 @@
         }
 
         function exportToExcel() {
-            let csv = "No,Nama,Instansi,Keperluan,Mau Ketemu,Tanggal\n";
+            let csv = "No,Nama,Instansi,Keperluan,Tujuan Bagian,Nama Pegawai,Tanggal\n";
             dataTamu.forEach((item, index) => {
-                csv += `${index + 1},"${item.nama}","${item.instansi}","${item.keperluan}","${item.tujuan}","${item.tanggal}"\n`;
+                csv += `${index + 1},"${item.nama}","${item.instansi}","${item.keperluan}","${item.bagian}","${item.tujuan}","${item.tanggal}"\n`;
             });
 
             const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
