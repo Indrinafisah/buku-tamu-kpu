@@ -19,6 +19,8 @@
     <form id="formTamu">
         <input type="text" id="nama" placeholder="Nama Lengkap" required>
         <input type="text" id="instansi" placeholder="Instansi / Asal" required>
+        <input type="text" id="telepon" placeholder="Nomor Telepon" required>
+        <input type="email" id="email" placeholder="Alamat Email" required>
         <input type="text" id="keperluan" placeholder="Keperluan" required>
         
         <select id="bagian" required>
@@ -52,6 +54,8 @@
                 <th>No</th>
                 <th>Nama</th>
                 <th>Instansi</th>
+                <th>No. Telepon</th>
+                <th>Email</th>
                 <th>Keperluan</th>
                 <th>Tujuan Bagian</th>
                 <th>Nama Pegawai</th>
@@ -76,13 +80,15 @@
             event.preventDefault();
             const nama = document.getElementById("nama").value.trim();
             const instansi = document.getElementById("instansi").value.trim();
+            const telepon = document.getElementById("telepon").value.trim();
+            const email = document.getElementById("email").value.trim();
             const keperluan = document.getElementById("keperluan").value.trim();
             const bagian = document.getElementById("bagian").value;
             const tujuan = document.getElementById("tujuan").value;
             const tanggal = getTanggalHariIni();
 
-            if (nama && instansi && keperluan && bagian && tujuan) {
-                dataTamu.push({ nama, instansi, keperluan, bagian, tujuan, tanggal });
+            if (nama && instansi && telepon && email && keperluan && bagian && tujuan) {
+                dataTamu.push({ nama, instansi, telepon, email, keperluan, bagian, tujuan, tanggal });
                 tampilkanData();
                 this.reset();
             }
@@ -96,6 +102,8 @@
                     <td>${index + 1}</td>
                     <td>${item.nama}</td>
                     <td>${item.instansi}</td>
+                    <td>${item.telepon}</td>
+                    <td>${item.email}</td>
                     <td>${item.keperluan}</td>
                     <td>${item.bagian}</td>
                     <td>${item.tujuan}</td>
@@ -106,9 +114,9 @@
         }
 
         function exportToExcel() {
-            let csv = "No,Nama,Instansi,Keperluan,Tujuan Bagian,Nama Pegawai,Tanggal\n";
+            let csv = "No,Nama,Instansi,No. Telepon,Email,Keperluan,Tujuan Bagian,Nama Pegawai,Tanggal\n";
             dataTamu.forEach((item, index) => {
-                csv += `${index + 1},"${item.nama}","${item.instansi}","${item.keperluan}","${item.bagian}","${item.tujuan}","${item.tanggal}"\n`;
+                csv += `${index + 1},"${item.nama}","${item.instansi}","${item.telepon}","${item.email}","${item.keperluan}","${item.bagian}","${item.tujuan}","${item.tanggal}"\n`;
             });
 
             const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
