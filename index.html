@@ -20,6 +20,7 @@
         <input type="text" id="nama" placeholder="Nama Lengkap" required>
         <input type="text" id="instansi" placeholder="Instansi / Asal" required>
         <input type="text" id="keperluan" placeholder="Keperluan" required>
+        <input type="text" id="tujuan" placeholder="Mau ketemu siapa" required>
         <button type="submit">Catat Tamu</button>
     </form>
 
@@ -27,7 +28,14 @@
 
     <table id="tabelTamu">
         <thead>
-            <tr><th>No</th><th>Nama</th><th>Instansi</th><th>Keperluan</th></tr>
+            <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>Instansi</th>
+                <th>Keperluan</th>
+                <th>Mau Ketemu</th>
+                <th>Tanggal</th>
+            </tr>
         </thead>
         <tbody></tbody>
     </table>
@@ -35,14 +43,24 @@
     <script>
         let dataTamu = [];
 
+        function getTanggalHariIni() {
+            const now = new Date();
+            const hari = now.getDate().toString().padStart(2, '0');
+            const bulan = (now.getMonth() + 1).toString().padStart(2, '0');
+            const tahun = now.getFullYear();
+            return `${hari}-${bulan}-${tahun}`;
+        }
+
         document.getElementById("formTamu").addEventListener("submit", function(event) {
             event.preventDefault();
             const nama = document.getElementById("nama").value.trim();
             const instansi = document.getElementById("instansi").value.trim();
             const keperluan = document.getElementById("keperluan").value.trim();
+            const tujuan = document.getElementById("tujuan").value.trim();
+            const tanggal = getTanggalHariIni();
 
-            if (nama && instansi && keperluan) {
-                dataTamu.push({ nama, instansi, keperluan });
+            if (nama && instansi && keperluan && tujuan) {
+                dataTamu.push({ nama, instansi, keperluan, tujuan, tanggal });
                 tampilkanData();
                 this.reset();
             }
@@ -57,15 +75,17 @@
                     <td>${item.nama}</td>
                     <td>${item.instansi}</td>
                     <td>${item.keperluan}</td>
+                    <td>${item.tujuan}</td>
+                    <td>${item.tanggal}</td>
                 </tr>`;
                 tbody.innerHTML += row;
             });
         }
 
         function exportToExcel() {
-            let csv = "No,Nama,Instansi,Keperluan\n";
+            let csv = "No,Nama,Instansi,Keperluan,Mau Ketemu,Tanggal\n";
             dataTamu.forEach((item, index) => {
-                csv += `${index + 1},"${item.nama}","${item.instansi}","${item.keperluan}"\n`;
+                csv += `${index + 1},"${item.nama}","${item.instansi}","${item.keperluan}","${item.tujuan}","${item.tanggal}"\n`;
             });
 
             const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
